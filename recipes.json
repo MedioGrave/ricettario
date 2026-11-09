@@ -83,6 +83,69 @@
    "notes": "Dosi stimate da verificare la prossima volta: acqua del brodo (1 l), tofu e seitan (200 g ciascuno).\nNella marinatura timo o salvia, a seconda di cosa hai.",
    "createdAt": 1794229708801,
    "updatedAt": 1794229708801
+  },
+  {
+   "id": "cetrioli-asiatici",
+   "title": "Cetrioli asiatici",
+   "category": "Contorni",
+   "servings": 4,
+   "time": "20 min",
+   "ingredients": [
+    {
+     "qty": "3",
+     "unit": "pz",
+     "name": "cetrioli"
+    },
+    {
+     "qty": "",
+     "unit": "q.b.",
+     "name": "sale grosso o fino, abbondante"
+    },
+    {
+     "qty": "4",
+     "unit": "cucchiai",
+     "name": "salsa di soia (anche 5)"
+    },
+    {
+     "qty": "1",
+     "unit": "cucchiai",
+     "name": "aceto di riso (anche 2)"
+    },
+    {
+     "qty": "1",
+     "unit": "cucchiai",
+     "name": "olio di semi di arachide"
+    },
+    {
+     "qty": "1",
+     "unit": "cucchiai",
+     "name": "burro d'arachidi"
+    },
+    {
+     "qty": "1",
+     "unit": "cucchiaini",
+     "name": "gochujang (pasta piccante coreana)"
+    },
+    {
+     "qty": "",
+     "unit": "q.b.",
+     "name": "aglio in polvere"
+    },
+    {
+     "qty": "",
+     "unit": "q.b.",
+     "name": "zenzero in polvere"
+    },
+    {
+     "qty": "",
+     "unit": "q.b.",
+     "name": "semi di sesamo, abbondanti"
+    }
+   ],
+   "steps": "Batti forte i cetrioli con il lato del coltello finché non si spaccano un po'.\nTagliali a cubotti.\nCospargili di sale abbondante e lasciali riposare 10-15 minuti, così perdono la loro acqua.\nIntanto prepara la marinatura: mescola salsa di soia, aceto di riso, olio di arachide, aglio e zenzero in polvere, burro d'arachidi e gochujang.\nScola i cetrioli dall'acqua che hanno rilasciato e uniscili alla marinatura.\nMescola bene, aggiungi abbondanti semi di sesamo e servi.",
+   "notes": "Porzioni stimate: 3 cetrioli per circa 4 persone come contorno.",
+   "createdAt": 1794229899621,
+   "updatedAt": 1794229899621
   }
  ]
 }
