@@ -1,4 +1,88 @@
 {
  "version": 1,
- "recipes": []
+ "recipes": [
+  {
+   "id": "spezzatino-vegano",
+   "title": "Spezzatino vegano",
+   "category": "Secondi",
+   "servings": 4,
+   "time": "circa 1 ora",
+   "ingredients": [
+    {
+     "qty": "4",
+     "unit": "pz",
+     "name": "patate medie"
+    },
+    {
+     "qty": "5",
+     "unit": "pz",
+     "name": "carote (anche 6)"
+    },
+    {
+     "qty": "1",
+     "unit": "pz",
+     "name": "cipolla"
+    },
+    {
+     "qty": "200",
+     "unit": "g",
+     "name": "tofu"
+    },
+    {
+     "qty": "200",
+     "unit": "g",
+     "name": "seitan"
+    },
+    {
+     "qty": "400",
+     "unit": "g",
+     "name": "pelati (1 scatola Mutti)"
+    },
+    {
+     "qty": "2",
+     "unit": "pz",
+     "name": "dadi vegetali Star"
+    },
+    {
+     "qty": "1",
+     "unit": "l",
+     "name": "acqua per il brodo"
+    },
+    {
+     "qty": "5",
+     "unit": "cucchiai",
+     "name": "salsa di soia (anche 6), per la marinatura"
+    },
+    {
+     "qty": "",
+     "unit": "q.b.",
+     "name": "paprika"
+    },
+    {
+     "qty": "",
+     "unit": "q.b.",
+     "name": "timo o salvia"
+    },
+    {
+     "qty": "",
+     "unit": "q.b.",
+     "name": "aglio in polvere"
+    },
+    {
+     "qty": "",
+     "unit": "q.b.",
+     "name": "olio extravergine d'oliva"
+    },
+    {
+     "qty": "",
+     "unit": "q.b.",
+     "name": "pepe"
+    }
+   ],
+   "steps": "Prepara il brodo: scalda l'acqua in un pentolino con i 2 dadi.\nTaglia patate, carote e cipolla a pezzi e falle rosolare in pentola con un filo d'olio.\nQuando sono rosolate, versa metà del brodo e lascia cuocere.\nIntanto taglia tofu e seitan a cubotti e marinali 15-20 minuti con salsa di soia, un filo d'olio, paprika, timo o salvia e aglio in polvere.\nQuando il brodo inizia ad asciugarsi, aggiungi i pelati spezzettati e continua la cottura.\nDopo un po' versa l'altra metà del brodo e lascia restringere.\nNel pentolino del brodo rosola tofu e seitan con la loro marinatura per circa 10 minuti.\nUnisci tofu e seitan alle verdure e cuoci tutto insieme per altri 5-10 minuti.\nServi con un filo d'olio a crudo e una macinata di pepe.",
+   "notes": "Dosi stimate da verificare la prossima volta: acqua del brodo (1 l), tofu e seitan (200 g ciascuno).\nNella marinatura timo o salvia, a seconda di cosa hai.",
+   "createdAt": 1794229708801,
+   "updatedAt": 1794229708801
+  }
+ ]
 }
