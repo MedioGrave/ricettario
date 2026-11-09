@@ -1,0 +1,614 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ricettario Davide</title>
+<meta name="theme-color" content="#FF6B4A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Ricettario">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@500;600;700;800;900&display=swap">
+<style>
+  :root { --ink:#111111; --cream:#FFF6DC; --tomato:#FF6B4A; --yellow:#F7C843; --mint:#7FD8D0; --pink:#F29BE8; --muted:#7A6F5E; --line:#E6DBC2; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--cream); overscroll-behavior-y: none; }
+  body { font-family: 'Figtree', system-ui, sans-serif; color: var(--ink); -webkit-tap-highlight-color: transparent; min-height: 100dvh; }
+  button, input, textarea, select { font-family: inherit; color: inherit; }
+  button { -webkit-appearance: none; appearance: none; border: none; background: none; padding: 0; margin: 0; cursor: pointer; font: inherit; }
+  input, textarea, select { font-size: 16px; }
+
+  @keyframes enter { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+  @keyframes popUp { 0% { opacity: 0; transform: translateY(16px) scale(.94); } 70% { opacity: 1; transform: translateY(-2px) scale(1.01); } 100% { transform: none; } }
+  .enter { animation: enter .38s cubic-bezier(.22,1,.36,1) both; }
+  .popup { animation: popUp .42s cubic-bezier(.34,1.56,.64,1) both; }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+
+  .top { background: var(--tomato); padding: max(14px, calc(env(safe-area-inset-top) + 8px)) 18px 18px; border-bottom: 3px solid var(--ink); position: relative; }
+  .top-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .badge { display: inline-block; background: var(--ink); color: var(--cream); font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; padding: 6px 12px; border-radius: 999px; }
+  h1 { font-size: 40px; line-height: 1; font-weight: 900; letter-spacing: -.02em; margin: 16px 0 4px; }
+  h2 { font-size: 30px; line-height: 1.05; font-weight: 900; letter-spacing: -.01em; margin: 14px 0 6px; }
+  h3 { font-size: 13px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; margin: 26px 0 10px; }
+  .sub { font-weight: 600; opacity: .85; }
+
+  .ibtn { width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; border-radius: 12px; background: var(--cream); border: 2px solid var(--ink); box-shadow: 0 3px 0 var(--ink); flex-shrink: 0; }
+  .press { transition: transform .12s ease, box-shadow .12s ease; }
+  .press:active { transform: translateY(3px); box-shadow: 0 0 0 var(--ink) !important; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-weight: 800; font-size: 16px; padding: 13px 18px; border-radius: 14px; border: 2px solid var(--ink); box-shadow: 0 3px 0 var(--ink); background: #fff; }
+  .btn.primary { background: var(--ink); color: var(--cream); }
+  .btn.yellow { background: var(--yellow); }
+  .btn.danger { background: #fff; color: #C4321A; border-color: #C4321A; box-shadow: 0 3px 0 #C4321A; }
+  .btn.small { padding: 8px 12px; font-size: 14px; border-radius: 11px; }
+  .btn.block { width: 100%; }
+
+  .pill { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 800; padding: 6px 10px; border-radius: 999px; border: 2px solid var(--ink); background: var(--cream); white-space: nowrap; }
+  .pill .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--muted); }
+
+  .wrap { padding: 16px 16px calc(110px + env(safe-area-inset-bottom)); max-width: 640px; margin: 0 auto; }
+  .search { width: 100%; padding: 13px 14px 13px 42px; border-radius: 14px; border: 2px solid var(--ink); background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23111' stroke-width='2.6' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='M20 20l-4-4'/%3E%3C/svg%3E") no-repeat 13px center; font-weight: 600; outline: none; }
+  .search:focus, .field:focus { box-shadow: 0 0 0 3px var(--yellow); }
+  .chips { display: flex; gap: 8px; overflow-x: auto; padding: 14px 2px 4px; margin: 0 -16px; padding-left: 16px; padding-right: 16px; scrollbar-width: none; }
+  .chips::-webkit-scrollbar { display: none; }
+  .chip { flex-shrink: 0; font-weight: 800; font-size: 14px; padding: 8px 13px; border-radius: 999px; border: 2px solid var(--ink); background: #fff; }
+  .chip.on { background: var(--ink); color: var(--cream); }
+
+  .list { display: flex; flex-direction: column; gap: 12px; margin-top: 14px; }
+  .card { display: flex; align-items: stretch; text-align: left; width: 100%; background: #fff; border: 2px solid var(--ink); border-radius: 16px; box-shadow: 0 3px 0 var(--ink); overflow: hidden; }
+  .card .swatch { width: 12px; flex-shrink: 0; border-right: 2px solid var(--ink); }
+  .card .body { padding: 13px 14px; flex: 1; min-width: 0; }
+  .card .title { font-size: 18px; font-weight: 800; line-height: 1.2; }
+  .card .meta { font-size: 13px; font-weight: 600; color: var(--muted); margin-top: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .card .arrow { display: flex; align-items: center; padding-right: 14px; }
+
+  .empty { text-align: center; padding: 40px 20px; font-weight: 600; color: var(--muted); }
+  .empty b { display: block; color: var(--ink); font-size: 20px; font-weight: 800; margin-bottom: 6px; }
+
+  .fab { position: fixed; right: 18px; bottom: calc(22px + env(safe-area-inset-bottom)); width: 64px; height: 64px; border-radius: 20px; background: var(--yellow); border: 3px solid var(--ink); box-shadow: 0 4px 0 var(--ink); display: flex; align-items: center; justify-content: center; z-index: 5; }
+
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+  .tag { font-size: 13px; font-weight: 800; padding: 5px 10px; border-radius: 999px; border: 2px solid var(--ink); background: var(--cream); }
+
+  .box { background: #fff; border: 2px solid var(--ink); border-radius: 16px; box-shadow: 0 3px 0 var(--ink); }
+  .scaler { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; }
+  .scaler .lbl { font-weight: 800; }
+  .scaler .ctl { display: flex; align-items: center; gap: 10px; }
+  .scaler .n { font-size: 22px; font-weight: 900; min-width: 30px; text-align: center; }
+  .rbtn { width: 38px; height: 38px; border-radius: 11px; border: 2px solid var(--ink); background: var(--yellow); box-shadow: 0 2px 0 var(--ink); font-size: 22px; font-weight: 900; line-height: 1; }
+
+  .ings { list-style: none; margin: 0; padding: 0; }
+  .ing { display: flex; align-items: baseline; gap: 12px; padding: 12px 14px; border-top: 2px dashed var(--line); width: 100%; text-align: left; }
+  .ings li:first-child .ing { border-top: none; }
+  .ing .q { font-weight: 900; min-width: 76px; flex-shrink: 0; }
+  .ing .nm { font-weight: 600; font-size: 17px; }
+  .ing.done .q, .ing.done .nm { text-decoration: line-through; opacity: .38; }
+  .ing .ck { width: 20px; height: 20px; border-radius: 6px; border: 2px solid var(--ink); flex-shrink: 0; align-self: center; display: flex; align-items: center; justify-content: center; }
+  .ing.done .ck { background: var(--mint); }
+
+  .steps { list-style: none; margin: 0; padding: 0; counter-reset: s; display: flex; flex-direction: column; gap: 12px; }
+  .steps li { display: flex; gap: 12px; font-size: 17px; font-weight: 500; line-height: 1.45; }
+  .steps li::before { counter-increment: s; content: counter(s); flex-shrink: 0; width: 30px; height: 30px; border-radius: 10px; background: var(--ink); color: var(--cream); font-weight: 900; font-size: 15px; display: flex; align-items: center; justify-content: center; margin-top: -1px; }
+
+  .note { background: var(--yellow); border: 2px solid var(--ink); border-radius: 16px; padding: 14px; font-size: 16px; font-weight: 600; line-height: 1.45; white-space: pre-wrap; box-shadow: 0 3px 0 var(--ink); }
+  .note .nh { font-size: 12px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 6px; }
+  .small-muted { font-size: 13px; font-weight: 600; color: var(--muted); }
+
+  label.l { display: block; font-size: 13px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; margin: 20px 0 8px; }
+  .field { width: 100%; padding: 12px 13px; border-radius: 12px; border: 2px solid var(--ink); background: #fff; font-weight: 600; outline: none; }
+  textarea.field { min-height: 120px; resize: vertical; line-height: 1.45; }
+  .row2 { display: flex; gap: 10px; }
+  .row2 > div { flex: 1; min-width: 0; }
+  .catpick { display: flex; flex-wrap: wrap; gap: 8px; }
+  .irow { display: flex; gap: 6px; align-items: center; margin-bottom: 8px; }
+  .irow .qty { width: 70px; flex-shrink: 0; }
+  .irow .unit { width: 66px; flex-shrink: 0; }
+  .irow .name { flex: 1; min-width: 0; }
+  .irow .field { padding: 11px 9px; }
+  .xbtn { width: 36px; height: 36px; flex-shrink: 0; border-radius: 10px; border: 2px solid var(--ink); background: #fff; display: flex; align-items: center; justify-content: center; }
+  .hint { font-size: 13px; font-weight: 600; color: var(--muted); margin-top: 6px; }
+
+  .savebar { position: fixed; left: 0; right: 0; bottom: 0; padding: 12px 16px calc(12px + env(safe-area-inset-bottom)); background: var(--cream); border-top: 3px solid var(--ink); display: flex; gap: 10px; z-index: 5; }
+  .savebar .btn { flex: 1; }
+
+  .msg { margin-top: 12px; padding: 12px 14px; border-radius: 12px; border: 2px solid var(--ink); font-weight: 700; }
+  .msg.ok { background: var(--mint); }
+  .msg.err { background: #FFC9BC; }
+  .steps-help { font-size: 15px; line-height: 1.5; font-weight: 500; }
+  .steps-help ol { padding-left: 20px; margin: 8px 0 0; }
+  .steps-help li { margin-bottom: 6px; }
+  a { color: inherit; font-weight: 800; }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+(function () {
+  'use strict';
+
+  // ---------- costanti ----------
+  var DEFAULT_REPO = 'MedioGrave/ricettario';
+  var FILE = 'recipes.json';
+  var LS_DATA = 'ricettario-data';
+  var LS_CFG = 'ricettario-config';
+  var CATS = [
+    { k: 'Primi', c: '#F7C843' },
+    { k: 'Secondi', c: '#FF9C85' },
+    { k: 'Contorni', c: '#7FD8D0' },
+    { k: 'Dolci', c: '#F29BE8' },
+    { k: 'Pane e pizza', c: '#E8C89A' },
+    { k: 'Sughi e salse', c: '#FFB35C' },
+    { k: 'Colazione', c: '#BFE3FF' },
+    { k: 'Altro', c: '#E5DED0' }
+  ];
+  var UNITS = ['g', 'kg', 'ml', 'l', 'cucchiai', 'cucchiaini', 'pz', 'spicchi', 'pizzico', 'q.b.'];
+
+  // ---------- storage locale ----------
+  function lsGet(k, d) { try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } }
+  function lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+
+  var data = lsGet(LS_DATA, null) || { recipes: [], pending: false, lastSync: 0 };
+  var cfg = lsGet(LS_CFG, null) || { repo: DEFAULT_REPO, token: '' };
+  if (!cfg.repo) cfg.repo = DEFAULT_REPO;
+  var rev = 0;
+  function saveLocal() { lsSet(LS_DATA, data); }
+  function saveCfg() { lsSet(LS_CFG, cfg); }
+
+  // ---------- stato UI ----------
+  var S = { route: 'home', id: null, q: '', cat: null, servings: null, checked: {}, draft: null, draftKey: null, homeScroll: 0, sync: 'idle', syncErr: '', setMsg: null };
+  var app = document.getElementById('app');
+
+  // ---------- utilità ----------
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
+  function norm(s) { return String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''); }
+  function catColor(k) { for (var i = 0; i < CATS.length; i++) if (CATS[i].k === k) return CATS[i].c; return '#E5DED0'; }
+  function live() { return data.recipes.filter(function (r) { return !r.deleted; }); }
+  function byId(id) { for (var i = 0; i < data.recipes.length; i++) if (data.recipes[i].id === id && !data.recipes[i].deleted) return data.recipes[i]; return null; }
+  function fmtDate(t) { if (!t) return ''; try { return new Date(t).toLocaleDateString('it-IT', { day: 'numeric', month: 'long', year: 'numeric' }); } catch (e) { return ''; } }
+
+  function parseQty(s) {
+    s = String(s || '').trim().replace(',', '.');
+    if (!s) return null;
+    var m = s.match(/^(\d+)\s+(\d+)\/(\d+)$/);
+    if (m) return +m[1] + (+m[2] / +m[3]);
+    m = s.match(/^(\d+)\/(\d+)$/);
+    if (m) return +m[1] / +m[2];
+    if (/^\d*\.?\d+$/.test(s)) return parseFloat(s);
+    return null;
+  }
+  function fmtNum(n) {
+    var r = n >= 100 ? Math.round(n) : n >= 10 ? Math.round(n * 10) / 10 : Math.round(n * 100) / 100;
+    return r.toLocaleString('it-IT', { maximumFractionDigits: 2 });
+  }
+  function scaledQty(q, f) {
+    var n = parseQty(q);
+    if (n == null || f === 1) return q || '';
+    return fmtNum(n * f);
+  }
+
+  // ---------- merge & base64 ----------
+  function merge(a, b) {
+    var m = {};
+    a.concat(b).forEach(function (r) {
+      var cur = m[r.id];
+      if (!cur || (r.updatedAt || 0) > (cur.updatedAt || 0)) m[r.id] = r;
+    });
+    return Object.keys(m).map(function (k) { return m[k]; });
+  }
+  function canon(list) { return JSON.stringify(list.slice().sort(function (x, y) { return x.id < y.id ? -1 : 1; })); }
+  function b64enc(str) {
+    var bytes = new TextEncoder().encode(str), bin = '';
+    for (var i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+    return btoa(bin);
+  }
+  function b64dec(b64) {
+    var bin = atob(b64.replace(/\s/g, '')), bytes = new Uint8Array(bin.length);
+    for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    return new TextDecoder().decode(bytes);
+  }
+
+  // ---------- GitHub ----------
+  function gh(path, opts) {
+    opts = opts || {};
+    var headers = { 'Accept': 'application/vnd.github+json', 'Authorization': 'Bearer ' + cfg.token.trim() };
+    if (opts.body) headers['Content-Type'] = 'application/json';
+    return fetch('https://api.github.com/repos/' + cfg.repo.trim() + path, { method: opts.method || 'GET', headers: headers, body: opts.body, cache: 'no-store' });
+  }
+  function errMsg(st) {
+    if (st === 401) return 'Token non valido o scaduto';
+    if (st === 403) return 'Il token non ha il permesso di scrivere';
+    if (st === 404) return 'Repository non trovato (o il token non ci ha accesso)';
+    return 'Errore GitHub (' + st + ')';
+  }
+  function getRemote() {
+    return gh('/contents/' + FILE + '?t=' + Date.now()).then(function (r) {
+      if (r.status === 404) return { recipes: [], sha: null };
+      if (!r.ok) throw new Error(errMsg(r.status));
+      return r.json().then(function (j) {
+        var txt = j.content ? b64dec(j.content) : '';
+        var parsed = txt.trim() ? JSON.parse(txt) : { recipes: [] };
+        return { recipes: parsed.recipes || [], sha: j.sha };
+      });
+    });
+  }
+  function putRemote(list, sha) {
+    var body = { message: 'Ricettario: aggiornamento ricette', content: b64enc(JSON.stringify({ version: 1, recipes: list }, null, 1) + '\n') };
+    if (sha) body.sha = sha;
+    return gh('/contents/' + FILE, { method: 'PUT', body: JSON.stringify(body) });
+  }
+
+  var syncing = false, again = false;
+  function sync() {
+    if (!cfg.token) { setSync('idle'); return pullPublic(); }
+    if (!navigator.onLine) { setSync('idle'); return Promise.resolve(); }
+    if (syncing) { again = true; return Promise.resolve(); }
+    syncing = true; setSync('busy');
+    var startRev = rev;
+    var attempt = 0;
+    function round() {
+      attempt++;
+      return getRemote().then(function (remote) {
+        var merged = merge(remote.recipes, data.recipes);
+        if (canon(merged) === canon(remote.recipes)) return merged;
+        return putRemote(merged, remote.sha).then(function (r) {
+          if (r.ok) return merged;
+          if ((r.status === 409 || r.status === 422) && attempt < 3) return round();
+          throw new Error(errMsg(r.status));
+        });
+      });
+    }
+    return round().then(function (merged) {
+      data.recipes = merge(data.recipes, merged);
+      data.pending = rev !== startRev;
+      data.lastSync = Date.now();
+      saveLocal();
+      setSync('ok');
+    }).catch(function (e) {
+      setSync('error', (e && e.message) || 'Errore di rete');
+    }).then(function () {
+      syncing = false;
+      softRender();
+      if (again || data.pending) { again = false; if (data.pending && S.sync !== 'error') sync(); }
+    });
+  }
+  function pullPublic() {
+    return fetch(FILE + '?t=' + Date.now(), { cache: 'no-store' }).then(function (r) { return r.ok ? r.json() : null; }).then(function (j) {
+      if (j && j.recipes) {
+        var merged = merge(data.recipes, j.recipes);
+        if (canon(merged) !== canon(data.recipes)) { data.recipes = merged; saveLocal(); softRender(); }
+      }
+    }).catch(function () {});
+  }
+  function setSync(st, err) { S.sync = st; S.syncErr = err || ''; updatePill(); }
+
+  function pillInfo() {
+    if (S.sync === 'busy') return { t: 'Sincronizzo…', c: '#F7C843' };
+    if (S.sync === 'error') return { t: 'Errore sync', c: '#FF6B4A' };
+    if (!cfg.token) return data.pending ? { t: 'Salvate solo qui', c: '#FFB35C' } : { t: 'Solo lettura', c: '#BBB' };
+    if (data.pending) return { t: navigator.onLine ? 'Da inviare' : 'Offline · da inviare', c: '#FFB35C' };
+    if (!navigator.onLine) return { t: 'Offline', c: '#BBB' };
+    return { t: 'Sincronizzato', c: '#3BBF8F' };
+  }
+  function pillHtml() { var p = pillInfo(); return '<button class="pill" data-a="go-settings" id="pill"><span class="dot" style="background:' + p.c + '"></span>' + esc(p.t) + '</button>'; }
+  function updatePill() { var el = document.getElementById('pill'); if (el) el.outerHTML = pillHtml(); }
+
+  // ---------- modifiche locali ----------
+  function commit() { rev++; data.pending = true; saveLocal(); sync(); }
+  function upsert(r) {
+    r.updatedAt = Date.now();
+    var i = data.recipes.findIndex(function (x) { return x.id === r.id; });
+    if (i >= 0) data.recipes[i] = r; else data.recipes.push(r);
+    commit();
+  }
+  function removeRecipe(id) {
+    var i = data.recipes.findIndex(function (x) { return x.id === id; });
+    var t = { id: id, deleted: true, updatedAt: Date.now() };
+    if (i >= 0) data.recipes[i] = t; else data.recipes.push(t);
+    commit();
+  }
+
+  // ---------- icone ----------
+  var I = {
+    menu: '<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2.6" stroke-linecap="round"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2.2"/><circle cx="9" cy="17" r="2.2"/></svg>',
+    back: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>',
+    plus: '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="3" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>',
+    edit: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16z"/></svg>',
+    arrow: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>',
+    x: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="3.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+    check: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg>',
+    sun: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2.6" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>'
+  };
+
+  // ---------- router ----------
+  function parseHash() {
+    var h = location.hash.replace(/^#\/?/, '');
+    var p = h.split('/');
+    if (p[0] === 'r' && p[1]) return { route: 'detail', id: decodeURIComponent(p[1]) };
+    if (p[0] === 'edit' && p[1]) return { route: 'edit', id: decodeURIComponent(p[1]) };
+    if (p[0] === 'new') return { route: 'new', id: null };
+    if (p[0] === 'settings') return { route: 'settings', id: null };
+    return { route: 'home', id: null };
+  }
+  function go(h) { location.hash = h; }
+  function back(fallback) { if (history.length > 1) history.back(); else location.replace(fallback || '#/'); }
+
+  function onRoute() {
+    if (S.route === 'home') S.homeScroll = window.scrollY;
+    var r = parseHash();
+    var prev = S.route;
+    S.route = r.route; S.id = r.id;
+    if (r.route === 'detail') {
+      var rc = byId(r.id);
+      if (!rc) { location.replace('#/'); return; }
+      if (prev !== 'detail' || S.servings == null || S.detailId !== r.id) { S.servings = rc.servings || null; S.checked = {}; S.detailId = r.id; }
+    } else { releaseWake(); }
+    if (r.route === 'edit' || r.route === 'new') {
+      var key = r.route + ':' + (r.id || '');
+      if (S.draftKey !== key || !S.draft) {
+        var src = r.id ? byId(r.id) : null;
+        if (r.id && !src) { location.replace('#/'); return; }
+        S.draft = src ? JSON.parse(JSON.stringify(src)) : { id: uid(), title: '', category: 'Primi', servings: 4, time: '', ingredients: [{ qty: '', unit: 'g', name: '' }], steps: '', notes: '', createdAt: Date.now() };
+        if (!S.draft.ingredients || !S.draft.ingredients.length) S.draft.ingredients = [{ qty: '', unit: 'g', name: '' }];
+        S.draftKey = key;
+      }
+    } else { S.draft = null; S.draftKey = null; }
+    if (r.route === 'settings') S.setMsg = null;
+    render(true);
+    if (r.route === 'home') window.scrollTo(0, S.homeScroll || 0); else window.scrollTo(0, 0);
+  }
+
+  // ---------- render ----------
+  function render(anim) {
+    var html = '';
+    if (S.route === 'home') html = viewHome();
+    else if (S.route === 'detail') html = viewDetail();
+    else if (S.route === 'edit' || S.route === 'new') html = viewEdit();
+    else if (S.route === 'settings') html = viewSettings();
+    app.innerHTML = '<div class="' + (anim ? 'enter' : '') + '">' + html + '</div>';
+    if (S.route === 'home') renderList();
+  }
+  // re-render che non disturba chi sta scrivendo
+  function softRender() {
+    if (S.route === 'home') { renderList(); updatePill(); }
+    else if (S.route === 'detail') { if (!byId(S.id)) location.replace('#/'); else render(false); }
+    else updatePill();
+  }
+
+  function viewHome() {
+    var chips = '<button class="chip' + (!S.cat ? ' on' : '') + '" data-a="cat" data-v="">Tutte</button>';
+    var used = {}; live().forEach(function (r) { used[r.category] = 1; });
+    CATS.forEach(function (c) { if (used[c.k]) chips += '<button class="chip' + (S.cat === c.k ? ' on' : '') + '" data-a="cat" data-v="' + esc(c.k) + '" style="' + (S.cat === c.k ? '' : 'background:' + c.c) + '">' + esc(c.k) + '</button>'; });
+    var n = live().length;
+    return '' +
+      '<div class="top"><div class="top-row"><span class="badge">Cucina di Davide</span><div style="display:flex;gap:8px;align-items:center">' + pillHtml() +
+      '<button class="ibtn press" data-a="go-settings" aria-label="Impostazioni">' + I.menu + '</button></div></div>' +
+      '<h1>Ricettario</h1><div class="sub">' + (n === 1 ? '1 ricetta' : n + ' ricette') + ' con le dosi giuste</div></div>' +
+      '<div class="wrap">' +
+      '<input class="search" id="q" type="search" placeholder="Cerca ricetta o ingrediente" value="' + esc(S.q) + '" autocomplete="off">' +
+      (n ? '<div class="chips">' + chips + '</div>' : '') +
+      '<div class="list" id="list"></div></div>' +
+      '<button class="fab press" data-a="new" aria-label="Nuova ricetta">' + I.plus + '</button>';
+  }
+  function renderList() {
+    var el = document.getElementById('list'); if (!el) return;
+    var q = norm(S.q);
+    var list = live().filter(function (r) {
+      if (S.cat && r.category !== S.cat) return false;
+      if (!q) return true;
+      var hay = norm(r.title + ' ' + (r.ingredients || []).map(function (i) { return i.name; }).join(' '));
+      return q.split(/\s+/).every(function (w) { return hay.indexOf(w) >= 0; });
+    }).sort(function (a, b) { return a.title.localeCompare(b.title, 'it'); });
+    if (!live().length) {
+      el.innerHTML = '<div class="empty"><b>Ancora nessuna ricetta</b>La prossima volta che cucini, tocca il + e segna le dosi mentre le metti.</div>';
+      return;
+    }
+    if (!list.length) { el.innerHTML = '<div class="empty"><b>Nessun risultato</b>Prova con un\'altra parola.</div>'; return; }
+    el.innerHTML = list.map(function (r) {
+      var meta = [r.category, r.servings ? r.servings + ' porz.' : '', r.time].filter(Boolean).join(' · ');
+      return '<button class="card press" data-a="open" data-id="' + esc(r.id) + '"><span class="swatch" style="background:' + catColor(r.category) + '"></span>' +
+        '<span class="body"><div class="title">' + esc(r.title) + '</div><div class="meta">' + esc(meta) + '</div></span><span class="arrow">' + I.arrow + '</span></button>';
+    }).join('');
+  }
+
+  function viewDetail() {
+    var r = byId(S.id); if (!r) return '';
+    var base = +r.servings || 0;
+    var f = base && S.servings ? S.servings / base : 1;
+    var ings = (r.ingredients || []).filter(function (i) { return (i.name || '').trim() || (i.qty || '').trim(); });
+    var steps = String(r.steps || '').split('\n').map(function (s) { return s.replace(/^\s*\d+[.)]\s*/, '').trim(); }).filter(Boolean);
+    var tags = '<span class="tag" style="background:' + catColor(r.category) + '">' + esc(r.category) + '</span>' + (r.time ? '<span class="tag">' + esc(r.time) + '</span>' : '');
+    var h = '<div class="top" style="background:' + catColor(r.category) + '"><div class="top-row"><button class="ibtn press" data-a="back" aria-label="Indietro">' + I.back + '</button>' +
+      '<div style="display:flex;gap:8px">' + ('wakeLock' in navigator ? '<button class="ibtn press" data-a="wake" aria-label="Schermo acceso" style="' + (wakeLock ? 'background:#111' : '') + '">' + (wakeLock ? I.sun.replace(/#111/g, '#F7C843') : I.sun) + '</button>' : '') +
+      '<button class="ibtn press" data-a="edit" aria-label="Modifica">' + I.edit + '</button></div></div>' +
+      '<h2>' + esc(r.title) + '</h2><div class="tags">' + tags + '</div></div><div class="wrap">';
+    if (base) {
+      h += '<div class="box scaler" style="margin-top:4px"><span class="lbl">Porzioni' + (f !== 1 ? ' <span class="small-muted">(base ' + base + ')</span>' : '') + '</span><span class="ctl">' +
+        '<button class="rbtn press" data-a="srv" data-v="-1" aria-label="Meno">−</button><span class="n">' + S.servings + '</span><button class="rbtn press" data-a="srv" data-v="1" aria-label="Più">+</button></span></div>';
+    }
+    if (ings.length) {
+      h += '<h3>Ingredienti</h3><ul class="ings box">' + ings.map(function (i, idx) {
+        var q = scaledQty(i.qty, f);
+        var unit = i.unit && i.unit !== 'q.b.' ? ' ' + i.unit : (i.unit === 'q.b.' ? 'q.b.' : '');
+        var qtxt = (q ? q : '') + (q ? unit : (i.unit === 'q.b.' ? 'q.b.' : ''));
+        var done = S.checked[idx];
+        return '<li><button class="ing' + (done ? ' done' : '') + '" data-a="chk" data-i="' + idx + '"><span class="ck">' + (done ? I.check : '') + '</span><span class="q">' + esc(qtxt) + '</span><span class="nm">' + esc(i.name) + '</span></button></li>';
+      }).join('') + '</ul>';
+    }
+    if (steps.length) h += '<h3>Procedimento</h3><ol class="steps">' + steps.map(function (s) { return '<li><span>' + esc(s) + '</span></li>'; }).join('') + '</ol>';
+    if ((r.notes || '').trim()) h += '<h3>Note</h3><div class="note"><div class="nh">Per la prossima volta</div>' + esc(r.notes) + '</div>';
+    h += '<p class="small-muted" style="margin-top:26px">Ultima modifica: ' + esc(fmtDate(r.updatedAt)) + '</p></div>';
+    return h;
+  }
+
+  function viewEdit() {
+    var d = S.draft; if (!d) return '';
+    var isNew = S.route === 'new';
+    var cats = CATS.map(function (c) { return '<button class="chip' + (d.category === c.k ? ' on' : '') + '" data-a="dcat" data-v="' + esc(c.k) + '" style="' + (d.category === c.k ? '' : 'background:' + c.c) + '">' + esc(c.k) + '</button>'; }).join('');
+    var units = '<datalist id="units">' + UNITS.map(function (u) { return '<option value="' + u + '">'; }).join('') + '</datalist>';
+    var rows = d.ingredients.map(function (i, idx) {
+      return '<div class="irow"><input class="field qty" inputmode="decimal" placeholder="qtà" data-i="' + idx + '" data-k="qty" value="' + esc(i.qty) + '">' +
+        '<input class="field unit" list="units" placeholder="unità" data-i="' + idx + '" data-k="unit" value="' + esc(i.unit) + '" autocapitalize="off">' +
+        '<input class="field name" placeholder="ingrediente" data-i="' + idx + '" data-k="name" value="' + esc(i.name) + '">' +
+        '<button class="xbtn" data-a="ding" data-i="' + idx + '" aria-label="Rimuovi">' + I.x + '</button></div>';
+    }).join('');
+    return '<div class="top" style="background:var(--yellow)"><div class="top-row"><button class="ibtn press" data-a="cancel" aria-label="Annulla">' + I.back + '</button><span class="badge">' + (isNew ? 'Nuova ricetta' : 'Modifica') + '</span></div>' +
+      '<h2>' + (isNew ? 'Cosa cucini?' : esc(d.title || 'Ricetta')) + '</h2></div>' +
+      '<div class="wrap">' + units +
+      '<label class="l" for="f-title">Nome</label><input class="field" id="f-title" data-f="title" placeholder="Es. Pasta e patate" value="' + esc(d.title) + '">' +
+      '<label class="l">Categoria</label><div class="catpick">' + cats + '</div>' +
+      '<div class="row2"><div><label class="l" for="f-srv">Porzioni</label><input class="field" id="f-srv" data-f="servings" inputmode="numeric" placeholder="4" value="' + esc(d.servings || '') + '"></div>' +
+      '<div><label class="l" for="f-time">Tempo</label><input class="field" id="f-time" data-f="time" placeholder="Es. 40 min" value="' + esc(d.time) + '"></div></div>' +
+      '<label class="l">Ingredienti</label>' + rows +
+      '<button class="btn small yellow press" data-a="aing" style="margin-top:4px">+ Ingrediente</button>' +
+      '<div class="hint">Le quantità si ricalcolano quando cambi le porzioni. Anche 1/2 o 0,5 vanno bene.</div>' +
+      '<label class="l" for="f-steps">Procedimento</label><textarea class="field" id="f-steps" data-f="steps" placeholder="Un passaggio per riga">' + esc(d.steps) + '</textarea>' +
+      '<label class="l" for="f-notes">Note per la prossima volta</label><textarea class="field" id="f-notes" data-f="notes" style="min-height:90px" placeholder="Es. meno sale, 5 minuti in più di cottura">' + esc(d.notes) + '</textarea>' +
+      (isNew ? '' : '<button class="btn danger block press" data-a="del" style="margin-top:28px">Elimina ricetta</button>') +
+      '</div><div class="savebar"><button class="btn press" data-a="cancel">Annulla</button><button class="btn primary press" data-a="save">Salva</button></div>';
+  }
+
+  function viewSettings() {
+    var m = S.setMsg;
+    var last = data.lastSync ? 'Ultima sincronizzazione: ' + new Date(data.lastSync).toLocaleString('it-IT', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : 'Mai sincronizzato';
+    return '<div class="top" style="background:var(--mint)"><div class="top-row"><button class="ibtn press" data-a="back" aria-label="Indietro">' + I.back + '</button>' + pillHtml() + '</div><h2>Impostazioni</h2></div>' +
+      '<div class="wrap">' +
+      (S.sync === 'error' ? '<div class="msg err">' + esc(S.syncErr) + '</div>' : '') +
+      '<label class="l" for="s-token">Token GitHub</label><input class="field" id="s-token" type="password" autocomplete="off" autocapitalize="off" placeholder="github_pat_…" value="' + esc(cfg.token) + '">' +
+      '<label class="l" for="s-repo">Repository</label><input class="field" id="s-repo" autocapitalize="off" autocomplete="off" value="' + esc(cfg.repo) + '">' +
+      '<div style="display:flex;gap:10px;margin-top:16px"><button class="btn primary press" data-a="savecfg" style="flex:1">Salva e prova</button><button class="btn press" data-a="syncnow">Sincronizza</button></div>' +
+      (m ? '<div class="msg ' + (m.ok ? 'ok' : 'err') + '">' + esc(m.t) + '</div>' : '') +
+      '<p class="small-muted">' + esc(last) + '</p>' +
+      '<h3>Backup</h3><div style="display:flex;gap:10px"><button class="btn press" data-a="export" style="flex:1">Esporta</button><button class="btn press" data-a="import" style="flex:1">Importa</button></div>' +
+      '<input type="file" id="imp" accept="application/json,.json" style="display:none">' +
+      '<h3>Come creare il token</h3><div class="box steps-help" style="padding:14px"><ol>' +
+      '<li>Su GitHub: <b>Settings → Developer settings → Personal access tokens → Fine-grained tokens → Generate new token</b>.</li>' +
+      '<li>Repository access: <b>Only select repositories</b> → <b>ricettario</b>.</li>' +
+      '<li>Permissions → Repository permissions → <b>Contents: Read and write</b>.</li>' +
+      '<li>Scadenza: la più lunga che ti propone (o nessuna).</li>' +
+      '<li>Copia il token e incollalo qui sopra.</li></ol></div>' +
+      '<p class="small-muted" style="margin-top:16px">Il token resta salvato solo su questo dispositivo. Se usi l\'app dalla schermata Home, inseriscilo da lì.</p></div>';
+  }
+
+  // ---------- eventi ----------
+  app.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-a]'); if (!b) return;
+    var a = b.getAttribute('data-a');
+    if (a === 'open') go('#/r/' + encodeURIComponent(b.getAttribute('data-id')));
+    else if (a === 'new') go('#/new');
+    else if (a === 'go-settings') { if (S.route !== 'settings') go('#/settings'); }
+    else if (a === 'back') back('#/');
+    else if (a === 'edit') go('#/edit/' + encodeURIComponent(S.id));
+    else if (a === 'cat') { S.cat = b.getAttribute('data-v') || null; render(false); }
+    else if (a === 'srv') { S.servings = Math.max(1, (S.servings || 1) + +b.getAttribute('data-v')); render(false); }
+    else if (a === 'chk') { var i = b.getAttribute('data-i'); S.checked[i] = !S.checked[i]; render(false); }
+    else if (a === 'wake') toggleWake();
+    else if (a === 'dcat') { S.draft.category = b.getAttribute('data-v'); app.querySelectorAll('[data-a="dcat"]').forEach(function (x) { var on = x === b; x.classList.toggle('on', on); x.style.background = on ? '' : catColor(x.getAttribute('data-v')); }); }
+    else if (a === 'aing') { S.draft.ingredients.push({ qty: '', unit: 'g', name: '' }); render(false); var q = app.querySelectorAll('.irow .qty'); if (q.length) q[q.length - 1].focus(); }
+    else if (a === 'ding') { S.draft.ingredients.splice(+b.getAttribute('data-i'), 1); if (!S.draft.ingredients.length) S.draft.ingredients.push({ qty: '', unit: 'g', name: '' }); render(false); }
+    else if (a === 'cancel') back('#/');
+    else if (a === 'save') saveDraft();
+    else if (a === 'del') { if (confirm('Eliminare questa ricetta?')) { removeRecipe(S.draft.id); S.draft = null; S.draftKey = null; location.replace('#/'); } }
+    else if (a === 'savecfg') saveSettings();
+    else if (a === 'syncnow') { S.setMsg = null; sync().then(function () { if (S.route === 'settings') render(false); }); }
+    else if (a === 'export') exportData();
+    else if (a === 'import') document.getElementById('imp').click();
+  });
+  app.addEventListener('input', function (e) {
+    var t = e.target;
+    if (t.id === 'q') { S.q = t.value; renderList(); return; }
+    if (!S.draft) return;
+    var f = t.getAttribute('data-f');
+    if (f) { S.draft[f] = f === 'servings' ? (parseInt(t.value, 10) || '') : t.value; return; }
+    var i = t.getAttribute('data-i'), k = t.getAttribute('data-k');
+    if (i != null && k) S.draft.ingredients[+i][k] = t.value;
+  });
+  app.addEventListener('change', function (e) { if (e.target.id === 'imp') importData(e.target); });
+
+  function saveDraft() {
+    var d = S.draft;
+    if (!(d.title || '').trim()) { var t = document.getElementById('f-title'); t.focus(); t.style.boxShadow = '0 0 0 3px #FF6B4A'; return; }
+    d.title = d.title.trim();
+    d.ingredients = d.ingredients.map(function (i) { return { qty: String(i.qty || '').trim(), unit: String(i.unit || '').trim(), name: String(i.name || '').trim() }; })
+      .filter(function (i) { return i.name || i.qty; });
+    var isNew = S.route === 'new';
+    var id = d.id;
+    upsert(d);
+    S.draft = null; S.draftKey = null;
+    if (isNew) location.replace('#/r/' + encodeURIComponent(id)); else back('#/r/' + encodeURIComponent(id));
+  }
+
+  function saveSettings() {
+    cfg.token = document.getElementById('s-token').value.trim();
+    cfg.repo = document.getElementById('s-repo').value.trim() || DEFAULT_REPO;
+    saveCfg();
+    if (!cfg.token) { S.setMsg = { ok: false, t: 'Senza token l\'app legge le ricette ma non può salvarle su GitHub.' }; render(false); return; }
+    S.setMsg = { ok: true, t: 'Controllo…' }; render(false);
+    gh('').then(function (r) {
+      if (!r.ok) throw new Error(errMsg(r.status));
+      return r.json();
+    }).then(function (j) {
+      if (j.permissions && !j.permissions.push) throw new Error('Il token può leggere ma non scrivere: serve Contents: Read and write');
+      S.setMsg = { ok: true, t: 'Collegato a ' + j.full_name + '. Le ricette si salvano su GitHub.' };
+      setSync('idle');
+      return sync();
+    }).catch(function (e) {
+      S.setMsg = { ok: false, t: e.message || 'Connessione non riuscita' };
+    }).then(function () { if (S.route === 'settings') render(false); });
+  }
+
+  function exportData() {
+    var json = JSON.stringify({ version: 1, recipes: data.recipes }, null, 1);
+    var name = 'ricettario-backup-' + new Date().toISOString().slice(0, 10) + '.json';
+    try {
+      var file = new File([json], name, { type: 'application/json' });
+      if (navigator.canShare && navigator.canShare({ files: [file] })) { navigator.share({ files: [file] }).catch(function () {}); return; }
+    } catch (e) {}
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([json], { type: 'application/json' }));
+    a.download = name; document.body.appendChild(a); a.click(); a.remove();
+  }
+  function importData(input) {
+    var f = input.files && input.files[0]; if (!f) return;
+    var rd = new FileReader();
+    rd.onload = function () {
+      try {
+        var j = JSON.parse(rd.result);
+        var list = (j.recipes || j).filter(function (r) { return r && r.id; });
+        data.recipes = merge(data.recipes, list);
+        commit();
+        S.setMsg = { ok: true, t: 'Importate ' + list.length + ' ricette.' };
+      } catch (e) { S.setMsg = { ok: false, t: 'File non valido.' }; }
+      render(false);
+    };
+    rd.readAsText(f);
+    input.value = '';
+  }
+
+  // ---------- schermo sempre acceso ----------
+  var wakeLock = null;
+  function toggleWake() {
+    if (wakeLock) { releaseWake(); render(false); return; }
+    navigator.wakeLock.request('screen').then(function (wl) {
+      wakeLock = wl;
+      wl.addEventListener('release', function () { wakeLock = null; if (S.route === 'detail') render(false); });
+      render(false);
+    }).catch(function () {});
+  }
+  function releaseWake() { if (wakeLock) { try { wakeLock.release(); } catch (e) {} wakeLock = null; } }
+
+  // ---------- avvio ----------
+  window.addEventListener('hashchange', onRoute);
+  window.addEventListener('online', function () { updatePill(); sync(); });
+  window.addEventListener('offline', updatePill);
+  document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'visible') sync(); });
+  onRoute();
+  sync();
+  if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(function () {});
+})();
+</script>
+</body>
+</html>
