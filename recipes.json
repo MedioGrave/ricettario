@@ -146,6 +146,84 @@
    "notes": "Porzioni stimate: 3 cetrioli per circa 4 persone come contorno.",
    "createdAt": 1794229899621,
    "updatedAt": 1794229979050
+  },
+  {
+   "id": "gnocchi-ripieni-castagne-noci",
+   "title": "Gnocchi ripieni di castagne e noci",
+   "category": "Primi",
+   "servings": 2,
+   "time": "circa 1 ora",
+   "ingredients": [
+    {
+     "qty": "300",
+     "unit": "g",
+     "name": "patate (gnocchi)"
+    },
+    {
+     "qty": "100",
+     "unit": "g",
+     "name": "farina integrale (fino a 120 g)"
+    },
+    {
+     "qty": "",
+     "unit": "q.b.",
+     "name": "fecola di patate, per spolverare"
+    },
+    {
+     "qty": "100",
+     "unit": "g",
+     "name": "castagne cotte e pelate (ripieno)"
+    },
+    {
+     "qty": "40",
+     "unit": "g",
+     "name": "noci (ripieno)"
+    },
+    {
+     "qty": "",
+     "unit": "q.b.",
+     "name": "lievito alimentare"
+    },
+    {
+     "qty": "",
+     "unit": "q.b.",
+     "name": "rosmarino tritato"
+    },
+    {
+     "qty": "200",
+     "unit": "g",
+     "name": "fagioli cannellini cotti (crema)"
+    },
+    {
+     "qty": "2",
+     "unit": "cucchiai",
+     "name": "latte vegetale (crema)"
+    },
+    {
+     "qty": "1",
+     "unit": "cucchiai",
+     "name": "olio EVO (crema)"
+    },
+    {
+     "qty": "",
+     "unit": "q.b.",
+     "name": "olio EVO"
+    },
+    {
+     "qty": "",
+     "unit": "q.b.",
+     "name": "sale"
+    },
+    {
+     "qty": "",
+     "unit": "q.b.",
+     "name": "pepe"
+    }
+   ],
+   "steps": "Lessa le patate, schiacciale ancora calde e lasciale intiepidire.\nAggiungi la farina integrale poco alla volta e il sale, e lavora fino a ottenere un impasto morbido e omogeneo.\nPer il ripieno trita grossolanamente castagne e noci con rosmarino e lievito alimentare.\nStendi l'impasto, ricava dei dischetti, farciscili con il ripieno e chiudili bene formando gli gnocchi. Spolvera con un po' di fecola.\nCuoci gli gnocchi in acqua bollente salata e scolali delicatamente quando vengono a galla.\nPassali in padella con un filo d'olio e rosolali velocemente fino a una leggera crosticina.\nFrulla i cannellini con olio, latte vegetale, sale, pepe e rosmarino fino a ottenere una crema vellutata.\nDistribuisci la crema sul fondo del piatto e adagia sopra gli gnocchi.",
+   "notes": "Ricetta da un reel Instagram: https://www.instagram.com/reel/DfkEGUExBaP/\nPiatto 100% vegetale.",
+   "createdAt": 1794338232139,
+   "updatedAt": 1794338232139
   }
  ]
 }
